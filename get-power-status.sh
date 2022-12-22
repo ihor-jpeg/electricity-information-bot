@@ -3,7 +3,7 @@
 drawing_from_battery="Battery Power"
 is_battery_power=false
 
-echo -e "Watching for the power source...\n"
+echo -e "Watching the power source...\n"
 
 while :
   do
