@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
+    "esModuleInterop": true,
     "target": "es2016",
     "rootDir": "src",
     "module": "commonjs",

@@ -1,7 +1,7 @@
 ### Electricity status bot
 The bot monitors the power sourse and when it changes it sends a message to a telegram chat informing you about electricity situation in your house.
 
-At the moment, the bot only runs on Macs.
+At the moment, the bot only runs on laptop (MacOS), so you would need a spare laptop.
 
 P.S. PRs with Linux/Windows support are welcome. Would be cool to run it on a Raspberry Pi
 
@@ -12,3 +12,4 @@ P.S. PRs with Linux/Windows support are welcome. Would be cool to run it on a Ra
   - open the chat and in the URL find the chatId (e.g. -123456789)
   - copy chatId to the `.env` file
   - run `bash start.sh` in the root directory
+  - to test, simply plug/unplug your laptop
