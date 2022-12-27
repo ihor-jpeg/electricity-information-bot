@@ -16,7 +16,7 @@ if [ ! -d /sys/class/gpio/gpio${GPIO} ]; then
 fi
 
 while true; do
-        read current pin value
+        # read current pin value
         if [ 1 -eq "$(</sys/class/gpio/gpio"${GPIO}"/value)" ]; then
                 CURRENT_POWER_STATUS=1
         else
@@ -30,9 +30,7 @@ while true; do
         fi
 
         # send request if value has changed
-        if [
-          [ "$POWER_VALUE" != "$CURRENT_POWER_STATUS" || "$INTERNET_VALUE" != "$CURRENT_INTERNET_STATUS" ]
-        ]; then
+        if [[ "$POWER_VALUE" != "$CURRENT_POWER_STATUS" || "$INTERNET_VALUE" != "$CURRENT_INTERNET_STATUS" ]]; then
                 curl -s -o /dev/null -X POST localhost:9000 -H "Content-Type: application/json" -d \
                 `{
                   "powerStatus":"'$CURRENT_POWER_STATUS'",
