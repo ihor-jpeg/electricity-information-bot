@@ -12,8 +12,6 @@ const {
 app.post('/', jsonParser, async (req: Request, res: Response) => {
   const powerStatus = JSON.parse(req.body.powerStatus);
 
-  console.log('hey');
-  
   const message = getMessageByStatus(powerStatus);
 
   await bot.sendMessage(groupChatId, message);
