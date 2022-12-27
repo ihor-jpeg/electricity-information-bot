@@ -10,7 +10,7 @@ const {
 } = initServer();
 
 app.post('/', jsonParser, async (req: Request, res: Response) => {
-  const isPowerFromBattery = JSON.parse(req.body.isBatteryPower);
+  const isPowerFromBattery = JSON.parse(req.body.powerStatus);
 
   const message = getMessageByPowerSource(isPowerFromBattery);
 
