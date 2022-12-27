@@ -12,6 +12,8 @@ const {
 app.post('/', jsonParser, async (req: Request, res: Response) => {
   const isPowerFromBattery = JSON.parse(req.body.powerStatus);
 
+  console.log('hey');
+  
   const message = getMessageByPowerSource(isPowerFromBattery);
 
   await bot.sendMessage(groupChatId, message);

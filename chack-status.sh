@@ -32,7 +32,7 @@ while true; do
         # send request if value has changed
         if [[ "$POWER_VALUE" != "$CURRENT_POWER_STATUS" || "$INTERNET_VALUE" != "$CURRENT_INTERNET_STATUS" ]]; then
                 curl -s -o /dev/null -X POST localhost:9000 -H "Content-Type: application/json" -d \
-                "{"powerStatus":"'$CURRENT_POWER_STATUS'", "internetStatus": "'$CURRENT_INTERNET_STATUS'"}"
+                '{"powerStatus":"'$CURRENT_POWER_STATUS'","internetStatus": "123"}'
 
                 echo -e "$(date '+%H:%M %d-%m-%Y') Status -> power: $CURRENT_POWER_STATUS, internet: $CURRENT_INTERNET_STATUS\n"
 
