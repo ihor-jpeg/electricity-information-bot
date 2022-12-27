@@ -1,9 +1,9 @@
-export const getMessageByPowerSource = (
-  isPowerFromBattery: boolean,
+export const getMessageByStatus = (
+  powerStatus: boolean,
 ) => {
-  if (isPowerFromBattery) {
-    return 'Електроенергія в будинку відсутня 😢';
+  if (powerStatus) {
+    return `⚡️ Електроенергія в будинку є ⚡️`;
   }
 
-  return `⚡️ Електроенергія в будинку є ⚡️`;
+  return 'Електроенергія в будинку відсутня 😢';
 };

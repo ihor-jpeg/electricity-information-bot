@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getMessageByPowerSource } from './helpers';
+import { getMessageByStatus } from './helpers';
 import { initServer } from './initServer';
 
 const {
@@ -10,11 +10,11 @@ const {
 } = initServer();
 
 app.post('/', jsonParser, async (req: Request, res: Response) => {
-  const isPowerFromBattery = JSON.parse(req.body.powerStatus);
+  const powerStatus = JSON.parse(req.body.powerStatus);
 
   console.log('hey');
   
-  const message = getMessageByPowerSource(isPowerFromBattery);
+  const message = getMessageByStatus(powerStatus);
 
   await bot.sendMessage(groupChatId, message);
 
