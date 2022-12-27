@@ -8,7 +8,7 @@ GPIO=18
 
 echo -e "Watching the power source...\n"
 
-if [ !-d /sys/class/gpio/gpio${GPIO}/direction ]; then
+if [ ! -d /sys/class/gpio/gpio${GPIO}/direction ]; then
         mkdir -p /sys/class/gpio/gpio${GPIO} && touch direction
 fi
 
