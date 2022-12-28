@@ -5,6 +5,7 @@ import { initServer } from './initServer';
 const {
   app,
   bot,
+  queue,
   groupChatId,
   jsonParser,
 } = initServer();
@@ -14,7 +15,11 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
 
   const message = getMessageByStatus(powerStatus);
 
-  await bot.sendMessage(groupChatId, message);
+  const sendMessage = async () => {
+    await bot.sendMessage(groupChatId, message);
+  };
+
+  queue.add(sendMessage);
 
   return res
     .status(200)
