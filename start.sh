@@ -21,4 +21,4 @@ echo "| To stop the bot press CTRL + C |"
 echo -e " -------------------------------- \n"
 
 npm start --silent &
-bash ./chack-status.sh
+bash ./check-status.sh
