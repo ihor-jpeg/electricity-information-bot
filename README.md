@@ -1,6 +1,8 @@
 # Electricity status bot
 The bot monitors the power sourse and when it changes it sends a message to a telegram chat/channel informing you about electricity situation in your house.
 
+P.S. the entire project is designed for a Raspberry Pi
+
 ## Equipment
   - Raspberry Pi
   - USB to TTL converter
