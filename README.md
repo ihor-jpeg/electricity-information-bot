@@ -43,6 +43,6 @@ The bot monitors the power sourse and when it changes it sends a message to a te
       [Install]
       WantedBy=multi-user.target
       ```
-    - run `sudo chmod u+rwx /etc/systemd/system/propanel.service`
+    - run `sudo chmod u+rwx /etc/systemd/system/BlackoutStatus.service`
     - enable service `sudo systemctl enable blackoutStatus`
     - reboot `sudo reboot`
