@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import TelegramBot from 'node-telegram-bot-api';
-import { EventQueue } from './EventQueue';
+import { EventQueue } from './EventQueue/EventQueue';
 
 export const initServer = () => {
   dotenv.config();
