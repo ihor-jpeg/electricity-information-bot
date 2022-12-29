@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { getMessageByStatus } from './helpers';
+import { getMessageByStatus, verifyPayload } from './helpers';
 import { initServer } from './initServer';
+import { HTTPStatus } from './typedefs';
 
 const {
   app,
@@ -11,18 +12,26 @@ const {
 } = initServer();
 
 app.post('/', jsonParser, async (req: Request, res: Response) => {
-  const powerStatus = JSON.parse(req.body.powerStatus);
+  let status = HTTPStatus.OK;
+  let statusCode = 200;
 
-  const message = getMessageByStatus(powerStatus);
+  try {
+    const { powerStatus } = verifyPayload(req.body);
 
-  const sendMessage = async () => {
-    await bot.sendMessage(groupChatId, message);
-  };
+    const message = getMessageByStatus(powerStatus);
 
-  queue.add(sendMessage);
-
-  return res
-    .status(200)
-    .send('OK')
-    .end();
+    const sendMessage = async () => {
+      await bot.sendMessage(groupChatId, message);
+    };
+  
+    queue.add(sendMessage);
+  } catch (error: any) {
+    status = error.message;
+    statusCode = 500;
+  } finally {
+    return res
+      .status(statusCode)
+      .send(status)
+      .end();
+  }
 });
