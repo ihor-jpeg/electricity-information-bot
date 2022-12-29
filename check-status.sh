@@ -28,7 +28,7 @@ while true; do
 
         if [[ "$POWER_VALUE" != "$CURRENT_POWER_STATUS" || "$INTERNET_VALUE" != "$CURRENT_INTERNET_STATUS" ]]; then
                 curl -s -o /dev/null -X POST localhost:9000 -H "Content-Type: application/json" -d \
-                '{"powerStatus":"'$CURRENT_POWER_STATUS'"}'
+                '{"powerStatus":"'$CURRENT_POWER_STATUS'","internetStatus": "'$CURRENT_INTERNET_STATUS'"}'
 
                 echo -e "$(date '+%H:%M %d-%m-%Y') Status -> power: $CURRENT_POWER_STATUS, internet: $CURRENT_INTERNET_STATUS\n" >> ./logs/power-status.logs.txt
 
