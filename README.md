@@ -27,7 +27,8 @@ The bot monitors the power sourse and when it changes it sends a message to a te
 ## Notes
   - it might take a few seconds for the TTL converter to completely power off
   - make the `start.sh` script run on boot
-    - create a file `BlackoutStatus.service` in `/etc/systemd/system/` with the following content. 
+    - create a file `BlackoutStatus.service` in `/etc/systemd/system/` with the following content.
+      ```
       [Service]\
       WorkingDirectory=ABSOLUTE-PATH-TO-PROJECT-ROOT-DIR\
       ExecStart=bash ABSOLUTE-PATH-TO-PROJECT-ROOT-DIR/start.sh\
@@ -40,6 +41,7 @@ The bot monitors the power sourse and when it changes it sends a message to a te
       Environment=NODE_ENV=production\
       [Install]\
       WantedBy=multi-user.target
+      ```
     - run `sudo chmod u+rwx /etc/systemd/system/propanel.service`
     - enable service `sudo systemctl enable blackoutStatus`
     - reboot `sudo reboot`
