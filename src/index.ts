@@ -23,7 +23,7 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
     const sendMessage = async () => {
       await bot.sendMessage(groupChatId, message);
     };
-  
+
     queue.add(sendMessage);
   } catch (error: any) {
     status = error.message;
