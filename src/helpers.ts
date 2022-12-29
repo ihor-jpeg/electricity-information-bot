@@ -12,7 +12,7 @@ export const getMessageByStatus = (
 };
 
 export const verifyPayload = (body: Record<string, any>) => {
-  const entries = Object.entries<any>(body);
+  const entries = Object.entries(body);
 
   entries.forEach(([key, value]) => {
     if (!knownStatuses.includes(value)) {
