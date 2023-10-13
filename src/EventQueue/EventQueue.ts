@@ -20,17 +20,17 @@ export class EventQueue {
       return;
     }
 
-    try {
-      for await (const event of this.eventQueue) {
+    for await (const event of this.eventQueue) {
+      try {
         await event.callback();
 
         event.status = EventStatus.Delivered;
-      }
-    } catch {
+      } catch (error) {
       // log error
-    } finally {
-      this.filterCompleted();
+      }
     }
+
+    this.filterOutCompleted();
   }
 
   async add(callback: EventCallback) {
@@ -53,7 +53,7 @@ export class EventQueue {
     }
   }
 
-  private filterCompleted() {
+  private filterOutCompleted() {
     this.eventQueue = this.eventQueue.filter(({ status }) => status !== EventStatus.Delivered);
   }
 
