@@ -45,7 +45,9 @@ export class EventQueue {
 
     try {
       await callback();
-    } catch {
+    } catch (error) {
+      console.log('send message', error);
+      
       this.eventQueue.push({
         callback,
         status: EventStatus.Queued,

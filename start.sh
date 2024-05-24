@@ -3,22 +3,29 @@
 BUILD_DIR=./dist
 MODULES_DIR=./node_modules
 
-if ! [ -d "$MODULES_DIR" ];
-  then
-      echo -e "Node modules not found. Installing...\n"
-      npm i --silent
-  fi
+echo -e "Installing node modules...\n"
+npm i --silent
 
-if ! [ -d "$BUILD_DIR" ];
-  then
-      echo -e "Building project...\n"
-      npm run build --silent
-      echo -e "Build done\n"
-  fi
+echo -e "Building project...\n"
+npm run build --silent
+echo -e "Build done\n"
 
 echo " -------------------------------- "
-echo "| To stop the bot press CTRL + C |"
+echo "| To stop the service press CTRL + C |"
 echo -e " -------------------------------- \n"
 
-# npm run prod --silent &
-# bash ./check-status.sh
+npm run prod --silent &
+
+while true; do
+    RESPONSE=$(curl -s -w "%{http_code}" -o /dev/null -X POST localhost:9000 -H "Content-Type: application/json" -d '{}')
+
+    if [ "$RESPONSE" -eq 200 ]; then
+        echo "Server responded successfully"
+        break
+    else
+        echo "No response. Retrying in 5 seconds..."
+        sleep 5
+    fi
+done
+
+bash ./check-status.sh

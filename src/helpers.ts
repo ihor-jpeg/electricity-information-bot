@@ -1,5 +1,5 @@
 export const getMessageByStatus = (
-  powerStatus: boolean,
+  powerStatus: number,
 ) => {
   if (powerStatus) {
     return `⚡️ Електроенергія в будинку є ⚡️`;

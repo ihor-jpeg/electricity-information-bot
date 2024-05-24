@@ -1,16 +1,16 @@
 #!/bin/bash
 
-HOST="www.google.com"
-POWER_VALUE=0
-INTERNET_VALUE=0
 GPIO=18
-
-
-echo -e "Watching the power source...\n"
 
 if [ ! -d /sys/class/gpio/gpio${GPIO} ]; then
         echo "${GPIO}" > /sys/class/gpio/export
 fi
+
+echo -e "Watching the power source...\n"
+
+HOST="www.google.com"
+POWER_VALUE="$(</sys/class/gpio/gpio"${GPIO}"/value)"
+INTERNET_VALUE=0
 
 while true; do
         # read current pin value
@@ -25,10 +25,12 @@ while true; do
         else
                   CURRENT_INTERNET_STATUS=0
         fi
-
+        echo $POWER_VALUE
+        echo $CURRENT_POWER_STATUS
+        echo "------"
         if [[ "$POWER_VALUE" != "$CURRENT_POWER_STATUS" || "$INTERNET_VALUE" != "$CURRENT_INTERNET_STATUS" ]]; then
                 curl -s -o /dev/null -X POST localhost:9000 -H "Content-Type: application/json" -d \
-                '{"powerStatus":"'$CURRENT_POWER_STATUS'","internetStatus": "123"}'
+                '{"powerStatus":"'$CURRENT_POWER_STATUS'","internetStatus": "'$CURRENT_INTERNET_STATUS'"}'
 
                 echo -e "$(date '+%H:%M %d-%m-%Y') Status -> power: $CURRENT_POWER_STATUS, internet: $CURRENT_INTERNET_STATUS\n" >> ./logs/power-status.logs.txt
 

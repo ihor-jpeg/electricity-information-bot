@@ -23,9 +23,18 @@ const {
 );
 
 app.post('/', jsonParser, async (req: Request, res: Response) => {
-  const powerStatus = JSON.parse(req.body.powerStatus);
+  try {
+    const { powerStatus } = req.body;
 
-  const message = getMessageByStatus(powerStatus);
+    console.log(typeof powerStatus);
+    console.log(powerStatus);
+    
+
+    if (powerStatus === undefined) {
+      throw new Error('The "powerStatus" variable is missing in payload')
+    }
+
+  const message = getMessageByStatus(Number(powerStatus));
 
   const sendMessage = async () => {
     await bot.sendMessage(groupChatId, message);
@@ -37,6 +46,17 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
     .status(200)
     .send('OK')
     .end();
+  } catch (error) {
+    console.log('Error occured', {
+      error,
+      body: req.body,
+    });
+
+    return res
+    .status(200)
+    .send('OK')
+    .end();
+  }
 });
 
 function checkEnvVariables() {
