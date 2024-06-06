@@ -1,4 +1,4 @@
-export const getMessageByStatus = (
+export const getMessage = (
   powerStatus: number,
 ) => {
   if (powerStatus) {

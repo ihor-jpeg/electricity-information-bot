@@ -2,6 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import TelegramBot from 'node-telegram-bot-api';
 import { EventQueue } from './EventQueue/EventQueue';
+import { ElectricityInformation } from './ElectricityInformation';
+
+const telegramWebhookPort = Number(process.env.TELEGRAM_BOT_PORT) || 8443;
 
 export const initServer = (
   botApiKey: string,
@@ -12,11 +15,16 @@ export const initServer = (
   const queue = new EventQueue();
   const bot = new TelegramBot(
     botApiKey,
-    { webHook: true },
+    {
+      webHook: {
+        port: telegramWebhookPort,
+      },
+    },
   );
-  
+  const yasno = new ElectricityInformation();
+
   const jsonParser = bodyParser.json();
-  
+
   app.listen(port, async () => {
     console.log(`⚡️ [server]: Server is running at http://localhost:${port}\n`);
   });
@@ -24,6 +32,7 @@ export const initServer = (
   return {
     app,
     bot,
+    yasno,
     queue,
     groupChatId,
     jsonParser,
