@@ -21,7 +21,7 @@ export const initServer = (
       },
     },
   );
-  const yasno = new ElectricityInformation();
+  // const yasno = new ElectricityInformation();
 
   const jsonParser = bodyParser.json();
 
@@ -32,7 +32,7 @@ export const initServer = (
   return {
     app,
     bot,
-    yasno,
+    // yasno,
     queue,
     groupChatId,
     jsonParser,

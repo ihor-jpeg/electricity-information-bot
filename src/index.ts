@@ -15,7 +15,7 @@ const {
   app,
   bot,
   queue,
-  yasno,
+  // yasno,
   jsonParser,
 } = initServer(
   botApiKey,
@@ -31,15 +31,15 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
       throw new Error('The "powerStatus" variable is missing in payload')
     }
 
-  const yasnoInfo = yasno.getInfo();
+  // const yasnoInfo = yasno.getInfo();
 
   const message = getMessage(
     Number(powerStatus),
   );
 
-  if (!info) {
-    
-  }
+  // if (!info) {
+
+  // }
 
   const sendMessage = async () => {
     await bot.sendMessage(groupChatId, message);
