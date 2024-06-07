@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { Request, Response } from 'express';
-import { getMessageByStatus } from './helpers';
+import { getMessage } from './helpers';
 import { initServer } from './initServer';
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}`});
@@ -15,7 +15,7 @@ const {
   app,
   bot,
   queue,
-  // yasno,
+  electricityInformationService,
   jsonParser,
 } = initServer(
   botApiKey,
@@ -27,19 +27,16 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
   try {
     const { powerStatus } = req.body;
 
+    const info = await electricityInformationService.getInfo();
+
     if (powerStatus === undefined) {
       throw new Error('The "powerStatus" variable is missing in payload')
     }
 
-  // const yasnoInfo = yasno.getInfo();
-
   const message = getMessage(
     Number(powerStatus),
+    info,
   );
-
-  // if (!info) {
-
-  // }
 
   const sendMessage = async () => {
     await bot.sendMessage(groupChatId, message);

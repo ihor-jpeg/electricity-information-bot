@@ -1,6 +1,4 @@
-import fetch from 'node-fetch';
-
-const requestUrl = String(process.env.ELECTRICITY_DATA_URL);
+import axios from 'axios';
 
 interface ApiResponse {
   reason: string;
@@ -18,7 +16,7 @@ export interface ElectricityInfo {
 }
 
 export class ElectricityInformation {
-  private readonly apiUrl: string = requestUrl;
+  private apiUrl: string;
 
   readonly schedule = [
     // Sunday
@@ -35,7 +33,11 @@ export class ElectricityInformation {
     [1, 2, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2, 2, 0, 0],
     // Saturday
     [1, 1, 1, 1, 2, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2, 2, 0, 0, 1, 1, 1, 1, 2, 2],
-];
+  ];
+
+  constructor() {
+    this.apiUrl = String(process.env.ELECTRICITY_DATA_URL);
+  }
 
   async isPlanned() {
     const {
@@ -43,7 +45,7 @@ export class ElectricityInformation {
       end,
     } = await this.getInfo();
 
-    if (!start && !end) {
+    if (!start || !end) {
       return false;
     }
 
@@ -56,77 +58,35 @@ export class ElectricityInformation {
   }
 
   async getInfo(): Promise<ElectricityInfo> {
-    const response = await fetch(yasnoRequestUrl);
+    try {
+      const response = await axios.get(this.apiUrl);
 
-    return this.parseResponse(response.body);
-  }
+      const {
+        plan_begin,
+        plan_end,
+      } = response.data;
 
-  private parseResponse(response: ApiResponse): ElectricityInfo {
-    if (!response.plan_begin || !response.plan_end) {
+      if (!plan_begin || !plan_end) {
+        return {};
+      }
+
+      const startDate = new Date(plan_begin);
+      const startHour = startDate.getHours().toString().padStart(2, '0');
+      const startMinute = startDate.getMinutes().toString().padStart(2, '0');
+
+      const endDate = new Date(plan_end);
+      const endHour = endDate.getHours().toString().padStart(2, '0');
+      const endMinute = endDate.getMinutes().toString().padStart(2, '0');
+      
+      return {
+        start: `${startHour}:${startMinute}`,
+        end: `${endHour}:${endMinute}`,
+      };
+    } catch (error) {
+      console.log('Error occured while getting electricity data', error);
+
       return {};
     }
-
-    return {
-      start: response.plan_begin,
-      end: response.plan_end,
-    };
-  }
-
-  private getCurrentBlackout () {
-    const now = new Date();
-    const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const hour = now.getHours();
-
-    const status = this.schedule[day][hour]; // 0 - has electricity, 1 - no electricity, 2 - possibly no electricity
-
-    if (status === 1 || status === 2) {
-        return this.findBlackoutStart(day, hour);
-    }
-
-    return null;
-  };
-
-  private findBlackoutStart(
-    day: number,
-    hour: number,
-  ) {
-    // Find the start of the blackout period
-    let blackoutDay = day;
-    let blackoutStart = hour;
-
-    // Iterate backward to find the start of the blackout period
-    while (blackoutDay >= 0) {
-        while (blackoutStart >= 0) {
-            if (this.schedule[blackoutDay][blackoutStart] !== 1 && this.schedule[blackoutDay][blackoutStart] !== 2) {
-                blackoutStart++;
-                break;
-            }
-            blackoutStart--;
-        }
-        if (blackoutStart < 0) {
-            blackoutDay--;
-            blackoutStart = 23;
-        } else {
-            break;
-        }
-    }
-
-    if (blackoutDay < 0) {
-        blackoutDay = 6;
-        blackoutStart = 0;
-    }
-
-    // Convert blackoutDay and blackoutStart to formatted strings
-    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const startTime = `${daysOfWeek[blackoutDay]} ${blackoutStart.toString().padStart(2, '0')}:00`;
-
-    return {
-        start: startTime
-    };
-
-    return new Date()
-      .setDay()
-      .setHour()
   }
 }
 
