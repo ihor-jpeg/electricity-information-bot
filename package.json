@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "prod": "NODE_ENV=prod pm2 start dist/index.js --name electricity-status",
+    "prod": "NODE_ENV=node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"export NODE_ENV=dev&& nodemon -q dist/index.js\""
   },
   "keywords": [],

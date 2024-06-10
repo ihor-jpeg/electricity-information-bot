@@ -1,9 +1,12 @@
-#!//bin/bash
+#!/bin/bash
 
 BUILD_DIR=./dist
 MODULES_DIR=./node_modules
 
 make stop
+
+echo "Pulling fresh master..."
+git checkout master && git pull
 
 echo -e "Installing node modules...\n"
 npm i --silent
