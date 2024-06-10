@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 import { Request, Response } from 'express';
 import { getMessage } from './helpers';
 import { initServer } from './initServer';
+import { exec } from 'child_process';
+import a from 'pm2';
+import { verifyGitHubWebhook } from './GithubWebhookController';
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}`});
 
@@ -58,6 +61,38 @@ app.post('/', jsonParser, async (req: Request, res: Response) => {
     .status(200)
     .send('OK')
     .end();
+  }
+});
+
+app.post('/github', jsonParser, async (req: Request, res: Response) => {
+  console.log('GH WEBHOOK');
+
+  try {
+    verifyGitHubWebhook(req, res);
+
+    exec('git pull origin master', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error pulling code: ${error}`);
+        return res.status(500).send('Error pulling code');
+      }
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+    });
+
+    exec('./start.sh', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing script: ${error.message}`);
+        console.error(`stderr: ${stderr}`);
+        return res.status(500).send('Error executing script');
+      }
+      console.log(`stdout: ${stdout}`);
+      console.error(`stderr: ${stderr}`);
+    });
+  
+
+    res.status(200).send('Code pulled and application restarted');
+  } catch (error) {
+    console.log('Got an error', error);
   }
 });
 
